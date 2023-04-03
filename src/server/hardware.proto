@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package hardware;
+
+service HardwareService {
+  rpc GetUsage (HardwareRequest) returns (HardwareResponse) {}
+}
+
+message HardwareRequest {}
+
+message HardwareResponse {
+  float cpu_usage = 1;
+  float memory_usage = 2;
+}
