@@ -1,5 +1,8 @@
 #!/bin/bash
-cd certs
+
+# Create a directory to store the certificates
+mkdir -p certs && cd certs
+
 # Generate a CA key
 openssl genrsa -out ca.key 2048
 
@@ -10,7 +13,7 @@ openssl req -x509 -new -nodes -key ca.key -subj "/CN=MyCA" -days 365 -out ca.crt
 openssl genrsa -out server.key 2048
 
 # Generate a server CSR
-openssl req -new -key server.key -subj "/CN=localhost" -out server.csr
+openssl req -new -key server.key -subj "/CN=server" -out server.csr
 
 # Generate a server certificate signed by the CA
 openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 365

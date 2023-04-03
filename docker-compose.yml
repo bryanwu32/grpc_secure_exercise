@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./src/server
+      dockerfile: Dockerfile
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./src/certs/server.crt:/code/certs/server.crt
+      - ./src/certs/server.key:/code/certs/server.key
+      - ./src/certs/ca.crt:/code/certs/ca.crt
+    networks:
+      - grpc_network
+
+  client:
+    build:
+      context: ./src/client
+      dockerfile: Dockerfile
+    volumes:
+      - ./src/certs/client.crt:/code/certs/client.crt
+      - ./src/certs/client.key:/code/certs/client.key
+      - ./src/certs/ca.crt:/code/certs/ca.crt
+    depends_on:
+      - server
+    environment:
+      - SERVER_HOST=server
+    networks:
+      - grpc_network
+
+networks:
+  grpc_network:
+    driver: bridge
